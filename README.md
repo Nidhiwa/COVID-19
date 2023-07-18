@@ -8,6 +8,11 @@ For this project, I conducted an analysis and exploration of Covid-19 data using
 
 The Covid-19 data used for this analysis was obtained from Our World in Data, covering the period from January 1, 2020, to July 12, 2023.
 
+***ABOUT THE DATABASE***
+
+You can access the database tables for the starter project of the Our World in Data COVID-19 datasets by visiting the following URL: https://ourworldindata.org/covid-deaths. The tables can be found within the "database" folder.
+
+
 CovidDeaths: 
 contains columns such as 
 isocode continent	location	date	population	total_cases	new_cases	new_cases_smoothed	total_deaths	new_deaths	new_deaths_smoothed	total_cases_per_million	new_cases_per_million	new_cases_smoothed_per_million	total_deaths_per_million	new_deaths_per_million	new_deaths_smoothed_per_million	reproduction_rate	icu_patients	icu_patients_per_million	hosp_patients	hosp_patients_per_million	weekly_icu_admissions	weekly_icu_admissions_per_million	weekly_hosp_admissions	weekly_hosp_admissions_per_million
