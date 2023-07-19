@@ -85,8 +85,8 @@ RollingCountofPeopleVaccinated NUMERIC
 INSERT INTO #PercentagePopulationVaccinated
 SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(CAST(new_vaccinations AS BIGINT))
 OVER (PARTITION BY dea.location order by dea.location, dea.date) AS RollingCountofPeopleVaccinated
-FROM coviddeaths dea
-JOIN covidvaccinations vac 
+FROM [COVID DEATHS] dea
+JOIN  [COVID VACCINATIONS] vac 
     ON dea.location = vac.location AND dea.date = vac.date
 where dea.continent IS NOT NULL
 
@@ -97,35 +97,35 @@ ORDER BY 2,3
 -- 10) Create views to store our results and later use for visualizations 
 Create View mortalityrate AS 
 SELECT continent, location, date, total_cases, total_deaths, (total_deaths * 1.0 /total_cases) * 100 as mortality_rate
-FROM coviddeaths
+FROM [COVID DEATHS] 
 WHERE Continent is not NULL
 
 Create View PercentagePopulationInfected AS 
 SELECT continent, location, date, total_cases, population, (total_cases * 1.0 /population) * 100 as PercentPopulationInfected
-FROM coviddeaths
+FROM [COVID DEATHS] 
 WHERE Continent is not NULL
 
 Create View HighestInfectedCountry AS 
 SELECT continent, location, population, Max(total_cases) as highestInfectionCount, MAX((total_cases * 1.0/population)*100) as PercentPopulationInfected
-FROM coviddeaths
+FROM [COVID DEATHS] 
 WHERE Continent is not NULL
 Group by continent, location, population
 
 Create View HighestDeathperPopulation AS 
 SELECT continent, location, population, MAX(total_deaths) as hightestDeathCount, MAX((total_deaths * 1.0/population)*100) as PercentPopulationDied
-FROM coviddeaths
+FROM[COVID DEATHS] 
 WHERE Continent is not NULL
 Group by continent, location, population
 
 Create View hightestDeathCountLocation AS 
 SELECT continent, location, MAX(total_deaths) as hightestDeathCount
-FROM coviddeaths
+FROM [COVID DEATHS] 
 WHERE CONTINENT IS NOT NULL 
 Group by continent, location
 
 Create View HighestDeathCountContinent AS 
 SELECT continent, MAX(total_deaths) as hightestDeathCount
-FROM coviddeaths
+FROM [COVID DEATHS] 
 WHERE CONTINENT IS NOT NULL 
 Group by continent
 
@@ -135,7 +135,7 @@ SELECT date, SUM(new_cases) as total_newcases, sum(new_deaths) as total_newdeath
         WHEN SUM(new_cases) <> 0 THEN SUM(new_deaths)*1.0/SUM(new_cases)*100 
         ELSE NULL
     END AS death_rate
-FROM coviddeaths
+FROM  [COVID DEATHS] 
 WHERE Continent is not NULL
 GROUP BY DATE
 
@@ -144,8 +144,8 @@ WITH PopVsVac (continent, location, date, population,  new_vaccinations, Rolling
 AS
 (SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(CAST(new_vaccinations AS BIGINT))
 OVER (PARTITION BY dea.location order by dea.location, dea.date) AS RollingCountofPeopleVaccinated
-FROM coviddeaths dea
-JOIN covidvaccinations vac 
+FROM [COVID DEATHS]  dea
+JOIN [COVID VACCINATIONS] vac 
     ON dea.location = vac.location AND dea.date = vac.date
 where dea.continent IS NOT NULL)
 SELECT *, (RollingCountofPeopleVaccinated*1.0/population) * 100 AS PercentageofVaccinatedPeople
